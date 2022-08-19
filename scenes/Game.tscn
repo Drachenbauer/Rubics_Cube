@@ -46,22 +46,6 @@ func _process(_delta):
 		reset()
 
 
-func _on_Yellow_input_event(_camera, event, _position, _normal, _shape_idx):
-	if event is InputEventMouseButton:
-		if event.button_index == 1 and event.pressed:
-			spin_y(1, -90)
-		if event.button_index == 2 and event.pressed:
-			spin_y(1, 90)
-
-
-func _on_White_input_event(_camera, event, _position, _normal, _shape_idx):
-	if event is InputEventMouseButton:
-		if event.button_index == 1 and event.pressed:
-			spin_y(-1, 90)
-		if event.button_index == 2 and event.pressed:
-			spin_y(-1, -90)
-
-
 func _on_Red_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == 1 and event.pressed:
@@ -78,6 +62,22 @@ func _on_Orange_input_event(_camera, event, _position, _normal, _shape_idx):
 			spin_x(-1, -90)
 
 
+func _on_Yellow_input_event(_camera, event, _position, _normal, _shape_idx):
+	if event is InputEventMouseButton:
+		if event.button_index == 1 and event.pressed:
+			spin_y(1, -90)
+		if event.button_index == 2 and event.pressed:
+			spin_y(1, 90)
+
+
+func _on_White_input_event(_camera, event, _position, _normal, _shape_idx):
+	if event is InputEventMouseButton:
+		if event.button_index == 1 and event.pressed:
+			spin_y(-1, 90)
+		if event.button_index == 2 and event.pressed:
+			spin_y(-1, -90)
+
+
 func _on_Blue_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == 1 and event.pressed:
@@ -92,6 +92,25 @@ func _on_Green_input_event(_camera, event, _position, _normal, _shape_idx):
 			spin_z(-1, 90)
 		if event.button_index == 2 and event.pressed:
 			spin_z(-1, -90)
+
+
+func spin_x(offset, angle):
+	for cubie in cubies:
+		#print(cubie.name, \" \", cubie.translation.x == offset, \" \", offset)
+		if cubie.translation.x == offset:
+			cube.remove_child(cubie)
+			cube_core.add_child(cubie)
+	
+	cube_core.rotation_degrees.x += angle
+	
+	for cubie in cubies:
+		if cubie.get_parent() == cube_core:
+			var old_transform = cubie.global_transform
+			cube_core.remove_child(cubie)
+			cube.add_child(cubie)
+			cubie.global_transform = old_transform
+	
+	cube_core.rotation_degrees.x -= angle
 
 
 func spin_y(offset, angle):
@@ -111,28 +130,10 @@ func spin_y(offset, angle):
 	
 	cube_core.rotation_degrees.y -= angle
 	
-	print(cubies[0].name, \" \", cubies[0].translation.x)
-	print(cubies[2].name, \" \", cubies[2].translation.x)
-	print(cubies[5].name, \" \", cubies[5].translation.x)
-	print(cubies[7].name, \" \", cubies[7].translation.x)
-
-
-func spin_x(offset, angle):
-	for cubie in cubies:
-		if cubie.translation.x == offset:
-			cube.remove_child(cubie)
-			cube_core.add_child(cubie)
-	
-	cube_core.rotation_degrees.x += angle
-	
-	for cubie in cubies:
-		if cubie.get_parent() == cube_core:
-			var old_transform = cubie.global_transform
-			cube_core.remove_child(cubie)
-			cube.add_child(cubie)
-			cubie.global_transform = old_transform
-	
-	cube_core.rotation_degrees.x -= angle
+	#print(cubies[0].name, \" \", cubies[0].translation.x)
+	#print(cubies[2].name, \" \", cubies[2].translation.x)
+	#print(cubies[5].name, \" \", cubies[5].translation.x)
+	#print(cubies[7].name, \" \", cubies[7].translation.x)
 
 
 func spin_z(offset, angle):
@@ -187,11 +188,11 @@ size = Vector3( 1, 1, 1 )
 [sub_resource type="BoxShape" id=8]
 extents = Vector3( 1.5, 1.5, 1.5 )
 
-[sub_resource type="BoxShape" id=7]
-extents = Vector3( 0.5, 0.1, 0.5 )
-
 [sub_resource type="BoxShape" id=9]
 extents = Vector3( 0.1, 0.5, 0.5 )
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 0.5, 0.1, 0.5 )
 
 [sub_resource type="BoxShape" id=10]
 extents = Vector3( 0.5, 0.5, 0.1 )
@@ -378,18 +379,6 @@ material/0 = null
 [node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/Cube"]
 shape = SubResource( 8 )
 
-[node name="Yellow" type="StaticBody" parent="Cube/CollisionBodies"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/Yellow"]
-shape = SubResource( 7 )
-
-[node name="White" type="StaticBody" parent="Cube/CollisionBodies"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/White"]
-shape = SubResource( 7 )
-
 [node name="Red" type="StaticBody" parent="Cube/CollisionBodies"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0 )
 
@@ -401,6 +390,18 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/Orange"]
 shape = SubResource( 9 )
+
+[node name="Yellow" type="StaticBody" parent="Cube/CollisionBodies"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/Yellow"]
+shape = SubResource( 7 )
+
+[node name="White" type="StaticBody" parent="Cube/CollisionBodies"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/White"]
+shape = SubResource( 7 )
 
 [node name="Blue" type="StaticBody" parent="Cube/CollisionBodies"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5 )
@@ -414,9 +415,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5 )
 [node name="CollisionShape" type="CollisionShape" parent="Cube/CollisionBodies/Green"]
 shape = SubResource( 10 )
 
-[connection signal="input_event" from="Cube/CollisionBodies/Yellow" to="." method="_on_Yellow_input_event"]
-[connection signal="input_event" from="Cube/CollisionBodies/White" to="." method="_on_White_input_event"]
 [connection signal="input_event" from="Cube/CollisionBodies/Red" to="." method="_on_Red_input_event"]
 [connection signal="input_event" from="Cube/CollisionBodies/Orange" to="." method="_on_Orange_input_event"]
+[connection signal="input_event" from="Cube/CollisionBodies/Yellow" to="." method="_on_Yellow_input_event"]
+[connection signal="input_event" from="Cube/CollisionBodies/White" to="." method="_on_White_input_event"]
 [connection signal="input_event" from="Cube/CollisionBodies/Blue" to="." method="_on_Blue_input_event"]
 [connection signal="input_event" from="Cube/CollisionBodies/Green" to="." method="_on_Green_input_event"]
