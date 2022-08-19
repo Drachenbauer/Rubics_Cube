@@ -96,7 +96,7 @@ func _on_Green_input_event(_camera, event, _position, _normal, _shape_idx):
 
 func spin_x(offset, angle):
 	for cubie in cubies:
-		#print(cubie.name, \" \", cubie.translation.x == offset, \" \", offset)
+		print(cubie.name, \" \", offset, \" \", cubie.translation.x, \" \", cubie.translation.x == offset)
 		if cubie.translation.x == offset:
 			cube.remove_child(cubie)
 			cube_core.add_child(cubie)
@@ -129,11 +129,6 @@ func spin_y(offset, angle):
 			cubie.global_transform = old_transform
 	
 	cube_core.rotation_degrees.y -= angle
-	
-	#print(cubies[0].name, \" \", cubies[0].translation.x)
-	#print(cubies[2].name, \" \", cubies[2].translation.x)
-	#print(cubies[5].name, \" \", cubies[5].translation.x)
-	#print(cubies[7].name, \" \", cubies[7].translation.x)
 
 
 func spin_z(offset, angle):
