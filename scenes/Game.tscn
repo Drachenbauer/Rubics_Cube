@@ -96,8 +96,8 @@ func _on_Green_input_event(_camera, event, _position, _normal, _shape_idx):
 
 func spin_x(offset, angle):
 	for cubie in cubies:
-		print(cubie.name, \" \", offset, \" \", cubie.translation.x, \" \", cubie.translation.x == offset)
-		if cubie.translation.x == offset:
+		#üprint(cubie.name, \": \", offset, \" = \", cubie.translation.x, \" -> \", cubie.translation.x == offset)
+		if int(cubie.translation.x) == offset:
 			cube.remove_child(cubie)
 			cube_core.add_child(cubie)
 	
@@ -106,6 +106,7 @@ func spin_x(offset, angle):
 	for cubie in cubies:
 		if cubie.get_parent() == cube_core:
 			var old_transform = cubie.global_transform
+			#print(old_transform)
 			cube_core.remove_child(cubie)
 			cube.add_child(cubie)
 			cubie.global_transform = old_transform
@@ -115,7 +116,7 @@ func spin_x(offset, angle):
 
 func spin_y(offset, angle):
 	for cubie in cubies:
-		if cubie.translation.y == offset:
+		if int(cubie.translation.y) == offset:
 			cube.remove_child(cubie)
 			cube_core.add_child(cubie)
 	
@@ -128,12 +129,13 @@ func spin_y(offset, angle):
 			cube.add_child(cubie)
 			cubie.global_transform = old_transform
 	
+	
 	cube_core.rotation_degrees.y -= angle
 
 
 func spin_z(offset, angle):
 	for cubie in cubies:
-		if cubie.translation.z == offset:
+		if int(cubie.translation.z) == offset:
 			cube.remove_child(cubie)
 			cube_core.add_child(cubie)
 	
@@ -145,6 +147,7 @@ func spin_z(offset, angle):
 			cube_core.remove_child(cubie)
 			cube.add_child(cubie)
 			cubie.global_transform = old_transform
+	
 	
 	cube_core.rotation_degrees.z -= angle
 
